@@ -9,22 +9,95 @@
   stroke-opacity: 0.2;
 }
 
+.leftchart {
+  border: 5px outset red;
+  /* display: inline-block; */
+  /* background-color: lightblue;   */
+  /* top: 60px; */
+  position: relative;
+  height: 700px;
+  width: 830px;
+  background-color: white;
+  /* right: 50px; */
+  float:left;
+  /* margin-top: 10px;
+  margin-bottom: 30px;
+  margin-right: 10px;
+  margin-left: 10px; */
+}
+
+.rightchart {
+  border: 5px outset pink;
+  /* display: inline-block; */
+  /* background-color: lightblue;   */
+  /* top: 60px; */
+  /* position: absolute; */
+  height: 700px;
+  width: 500px;
+  background-color: white;
+  float:right;
+  /* right: 50px; */
+  /* margin-top: 10px;
+  margin-bottom: 30px;
+  margin-right: 150px;
+  margin-left: 850px; */
+}
+
+
 
 </style>
 <body>
-<div style="width:2000px">
-    <svg width="800" height="800" id="map" ></svg>
-    <svg width="800" height="600" id="bar" ></svg>
-    <!-- <svg id="reference" width="960" height="800"></svg> -->
-</div>
+
+<h1>INFO H517 | Project 1 | Interactive visualizations of London's 1854 cholera epidemic using D3.js</h1>
+
+<!-- <div style="width:1600px"> -->
+    <!-- <svg width="700" height="600" id="map" ></svg> -->
+    <!-- <svg width="700" height="600" id="bar" ></svg> -->
+<!-- </div> -->
 
 <!-- Checkboxes -->
-<div class="filter_options">
+<!-- <div class="filter_options">
     <input class="color_button" name="GenderBreakdown" value="GenderBreakdown" type="checkbox">GenderBreakdown</input>
     <input class="color_button" name="AgeBreakdown" value="AgeBreakdown" type="checkbox">AgeBreakdown</input>
+</div> -->
+
+<div class="leftchart" >
+    <div style="position:absolute; top:-05px; left:300px; font-size:20px;"><p>Distribution of deaths vs pumps </p></div>
+    <div>
+        <svg style="position:absolute;" viewBox="100 100 800 800" preserveAspectRatio="xMinYMin" id="map" ></svg>
+
+        <div class="filter_options"  style="display: inline-block;border: 2px outset red;position:absolute; top:150px; left:725px; width: 100px;">
+            <div>Breakdown by</div> 
+            <div>
+                <input class="color_button" name="GenderBreakdown" value="GenderBreakdown" type="checkbox">Gender</input>
+            </div>
+    
+            <div>
+                <input class="color_button" name="AgeBreakdown" value="AgeBreakdown" type="checkbox">Age</input>
+            </div>
+        </div>
+    </div>
 </div>
 
+<div class="rightchart">
+    <div style="position:absolute; top:85px; left:1060px;"><p>Distribution of deaths over time </p></div>
+    <div style="border: 3px outset greenyellow;position:absolute; top:85px; left:910px; width: 490px; height:350px;">
+        <svg id="bar" width="700" height="550" viewBox="70 90 500 500" preserveAspectRatio="xMinYMin" ></svg>
+    </div>
+    <div style="position:absolute; top:404px; left:920px;"><p>Note: Hover over the bars to see corresponding deaths on the map</p></div>
+    
+    <div id="piecharts">
+        <svg id="pie1"> 
+
+        </svg>
+    </div>
+</div>
+    
+
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<!-- Color scale -->
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script>
 
 
@@ -41,11 +114,11 @@ d3.json("streets.json", function (data) {
 
         for (var i = 0; i < data.length; i++){
             var line = data[i];
-            d3.select('svg').append('path')
-                .style('fill', 'none')
-                .style('stroke', '#414141')
-                .style('stroke-width', '2px')
-                .attr('d', connect(line))
+            d3.select('svg').append('path') 
+            .style('fill', 'none')
+            .style('stroke', '#414141')
+            .style('stroke-width', '2px')
+            .attr('d', connect(line))
 
         }
     });
@@ -161,6 +234,81 @@ d3.csv("deaths_age_sex1.csv", function (data) {
                 .style('fill', 'blue')
         }
     })
+
+    //pie chart of distribution of deaths by sex
+    var gendercounts = {};
+    var gender = {
+        1 : "Female",
+        0 : "Male"
+    };
+    
+    for(var i = 0; i < data.length; i++){
+        var key = data.gender;
+        if(!gendercounts[key]) gendercounts[key] = 0;
+        gendercounts[key]++;
+    }
+
+    // // set the dimensions and margins of the graph
+    // var width = 450
+    //     height = 450
+    //     margin = 40
+
+    // // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+    // var radius = Math.min(width, height) / 2 - margin
+
+    // // append the svg object to the div called 'my_dataviz'
+    // var svg = d3.select("#pie1")
+    //     .append("svg")
+    //     .attr("width", width)
+    //     .attr("height", height)
+    //     .append("g")
+    //     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    // // Create dummy data
+    // var data = gendercounts
+
+    // // set the color scale
+    // var color = d3.scaleOrdinal()
+    //     .domain(data)
+    //     .range(d3.schemeSet2);
+
+    // // Compute the position of each group on the pie:
+    // var pie = d3.pie()
+    // .value(function(d) {return d.value; })
+    // var data_ready = pie(d3.entries(data))
+    // // Now I know that group A goes from 0 degrees to x degrees and so on.
+
+    // // shape helper to build arcs:
+    // var arcGenerator = d3.arc()
+    // .innerRadius(0)
+    // .outerRadius(radius)
+
+    // // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+    // svg
+    // .selectAll('mySlices')
+    // .data(data_ready)
+    // .enter()
+    // .append('path')
+    //     .attr('d', arcGenerator)
+    //     .attr('fill', function(d){ return(color(d.data.key)) })
+    //     .attr("stroke", "black")
+    //     .style("stroke-width", "2px")
+    //     .style("opacity", 0.7)
+
+    // // Now add the annotation. Use the centroid method to get the best coordinates
+    // svg
+    // .selectAll('mySlices')
+    // .data(data_ready)
+    // .enter()
+    // .append('text')
+    // .text(function(d){ return "grp " + d.data.key})
+    // .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
+    // .style("text-anchor", "middle")
+    // .style("font-size", 17)
+
+
+
+    //pie chart of distribution of deaths by age
 
 });
 
