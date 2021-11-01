@@ -28,14 +28,14 @@
 
 .rightchart {
   border: 5px outset pink;
-  /* display: inline-block; */
+  display: inline-block;
   /* background-color: lightblue;   */
   /* top: 60px; */
   /* position: absolute; */
   height: 700px;
   width: 500px;
   background-color: white;
-  float:right;
+  /* float:right; */
   /* right: 50px; */
   /* margin-top: 10px;
   margin-bottom: 30px;
@@ -79,19 +79,20 @@
     </div>
 </div>
 
-<div class="rightchart">
-    <div style="position:absolute; top:85px; left:1060px;"><p>Distribution of deaths over time </p></div>
-    <div style="border: 3px outset greenyellow;position:absolute; top:85px; left:910px; width: 490px; height:350px;">
+<!-- <div class="rightchart"> -->
+    <div style="position:absolute; top:110px; left:1060px; width: 250px;"><p>Distribution of deaths over time </p></div>
+    <div style="border: 3px outset greenyellow;position:absolute; top:110px; left:910px; width: 490px; height:350px;">
         <svg id="bar" width="700" height="550" viewBox="70 90 500 500" preserveAspectRatio="xMinYMin" ></svg>
     </div>
-    <div style="position:absolute; top:404px; left:920px;"><p>Note: Hover over the bars to see corresponding deaths on the map</p></div>
+    <div style="position:absolute; top:429px; left:920px; width: 490px;"><p>Note: Hover over the bars to see corresponding deaths on the map</p></div>
     
-    <div id="piecharts">
-        <svg id="pie1"> 
-
-        </svg>
+    <div style="border: 3px outset greenyellow;position:absolute; top:465px; left:910px; width: 490px; height:340px;">
+        <div style="position:absolute; left:100px; width: 350px;"><p>Distribution of deaths by gender and age </p></div>
+        <svg id="pie1" width="700" height="550" viewBox="-110 -150 500 500" preserveAspectRatio="xMinYMin" > </svg>
+        <svg id="pie2" width="700" height="550" viewBox="-350 -150 500 500" preserveAspectRatio="xMinYMin" 
+        style="position:absolute; top:0px; left:-20px; "> </svg>
     </div>
-</div>
+<!-- </div> -->
     
 
 
@@ -145,71 +146,15 @@ d3.csv("deaths_age_sex1.csv", function (data) {
         .domain([0, 1, 2, 3, 4, 5])
         .range(["purple", "indigo", "violet", 'pink', 'orange', 'grey'])
 
-    // var gendercheckbox = document.getElementById("gender");  
-    // var agecheckbox = document.getElementById("age"); 
-
     d3.select('#map').selectAll('circle')
             .data(data)
             .enter().append('circle')
-            // .style('fill', function(d){
-            //     //get the value of the checked
-            //     var value = d3.select('input[id="dataset"]').node().value;
-            //     if (value == "GenderBreakdown") {
-            //         return sexcolor(d.gender);
-            //     } else if (value == "AgeBreakdown") {
-            //         return agecolor(d.age); 
-            //     } else {
-            //         return 'blue'
-            //     }
-            // })
             .style('fill', 'blue')
             .attr('r', '3px')
             .attr('cx', function(d) { return d.x * 40; })
             .attr('cy', function(d) { return d.y * 40; })
             .attr('dateid', function(d) { return 'left_' + d.dateid; } )
             .attr('age', function(d) { return d.age; } );
-
-    // d3.select('#map').selectAll('circle')
-    //         .data(data)
-    //         .enter()
-    //         // .append('label')
-    //         //     .attr('for', function(d,i){ return 'a'+i; })
-    //         //     .text(function(d) { return d; })
-    //         .append("input")
-    //             .attr("checked", true)
-    //             .attr("type", "checkbox")
-    //             .attr("id", function(d,i) { return 'a'+i; })
-    //             .attr("onClick", "change(this)");
-
-    // a function that will be responsible for updating the visibility of the dots
-    // function update() {
-
-        
-
-    //     // a helper function that will return the correct display value
-    //     // it will be called for every dot
-        // function display(d) {
-
-        //     if (gendercheckbox.checked == true){  
-        //         d3.selectAll('circle')
-        //         .style('fill', function (d) { return sexcolor(d.gender) })
-        //         }
-        //     else if (agecheckbox.checked == true){  
-        //         d3.selectAll('circle')
-        //         .style('fill', function (d) { return agecolor(d.age) })
-        //         }
-        //     else {
-        //         d3.selectAll('circle')
-        //         .style('fill', 'blue')
-        //     }
-
-    //     // we change the display attribute of every dot using the display function just defined
-    //     d3.selectAll('circle').attr('display', display);
-    //     }
-
-    // we add a simple handler to all the checkboxes: every time one changes,
-    // just call update
-    // d3.selectAll(".filter_options input").on("change", update);
 
     //Change deaths color by age
     d3.selectAll("input[name='AgeBreakdown']").on("click", function() {
@@ -235,83 +180,140 @@ d3.csv("deaths_age_sex1.csv", function (data) {
         }
     })
 
-    //pie chart of distribution of deaths by sex
+});
+
+//pie chart of distribution of deaths by gender
+d3.csv("deaths_age_sex1.csv", function(data) {
     var gendercounts = {};
     var gender = {
         1 : "Female",
         0 : "Male"
     };
     
-    for(var i = 0; i < data.length; i++){
-        var key = data.gender;
-        if(!gendercounts[key]) gendercounts[key] = 0;
-        gendercounts[key]++;
+    for (var i = 0; i < data.length; i++) {
+        var key = data[i].gender;
+        var mapped_key = gender[key];
+        if (!gendercounts[mapped_key]) gendercounts[mapped_key] = 0;
+        gendercounts[mapped_key]++;
     }
 
-    // // set the dimensions and margins of the graph
-    // var width = 450
-    //     height = 450
-    //     margin = 40
+    // set the dimensions and margins of the graph
+    var margin = 10
+    var radius = 100
 
-    // // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-    // var radius = Math.min(width, height) / 2 - margin
+    // Assign gendercounts to data variable
+    var data = gendercounts
 
-    // // append the svg object to the div called 'my_dataviz'
-    // var svg = d3.select("#pie1")
-    //     .append("svg")
-    //     .attr("width", width)
-    //     .attr("height", height)
-    //     .append("g")
-    //     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    // set the color scale
+    var color = d3.scaleOrdinal()
+                    .domain(data)
+                    .range(d3.schemeSet2);
 
-    // // Create dummy data
-    // var data = gendercounts
+    // Compute the position of each group on the pie:
+    var pie = d3.pie()
+                .value(function(d) {return d.value; })
+    var data_ready = pie(d3.entries(data))
 
-    // // set the color scale
-    // var color = d3.scaleOrdinal()
-    //     .domain(data)
-    //     .range(d3.schemeSet2);
+    // shape helper to build arcs:
+    var arcGenerator = d3.arc()
+                            .innerRadius(0)
+                            .outerRadius(radius)
 
-    // // Compute the position of each group on the pie:
-    // var pie = d3.pie()
-    // .value(function(d) {return d.value; })
-    // var data_ready = pie(d3.entries(data))
-    // // Now I know that group A goes from 0 degrees to x degrees and so on.
-
-    // // shape helper to build arcs:
-    // var arcGenerator = d3.arc()
-    // .innerRadius(0)
-    // .outerRadius(radius)
-
-    // // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-    // svg
-    // .selectAll('mySlices')
-    // .data(data_ready)
-    // .enter()
-    // .append('path')
-    //     .attr('d', arcGenerator)
-    //     .attr('fill', function(d){ return(color(d.data.key)) })
-    //     .attr("stroke", "black")
-    //     .style("stroke-width", "2px")
-    //     .style("opacity", 0.7)
+    // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+    d3
+    .select('#pie1')
+    .selectAll('path')
+    .data(data_ready)
+    .enter()
+    .append('path')
+        .attr('d', arcGenerator)
+        .attr('fill', function(d){ return(color(d.data.key)) })
+        .attr("stroke", "black")
+        .style("stroke-width", "2px")
+        .style("opacity", 0.7)
 
     // // Now add the annotation. Use the centroid method to get the best coordinates
-    // svg
-    // .selectAll('mySlices')
-    // .data(data_ready)
-    // .enter()
-    // .append('text')
-    // .text(function(d){ return "grp " + d.data.key})
-    // .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
-    // .style("text-anchor", "middle")
-    // .style("font-size", 17)
+    d3
+    .select('#pie1')
+    .selectAll('text')
+    .data(data_ready)
+    .enter()
+    .append('text')
+    .text(function(d){ return (d.data.key + ': ' + d.data.value) })
+    .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
+    .style("text-anchor", "middle")
+    .style("font-size", 17)
 
+})
 
+//pie chart of distribution of deaths by age
+d3.csv("deaths_age_sex1.csv", function(data) {
+    var agecounts = {};
+    var age = {
+        0 : "0-10",
+        1 : "11-20",
+        2 : "21-40",
+        3 : "41-60",
+        4 : "61-80",
+        5 : ">80"
+    };
+    
+    for (var i = 0; i < data.length; i++) {
+        var key = data[i].age;
+        var mapped_key = age[key];
+        if (!agecounts[mapped_key]) agecounts[mapped_key] = 0;
+        agecounts[mapped_key]++;
+    }
 
-    //pie chart of distribution of deaths by age
+    // set the dimensions and margins of the graph
+    var margin = 10
+    var radius = 100
 
-});
+    // Assign gendercounts to data variable
+    var data = agecounts
 
+    // set the color scale
+    var color = d3.scaleOrdinal()
+                    .domain(data)
+                    .range(d3.schemeSet2);
+
+    // Compute the position of each group on the pie:
+    var pie = d3.pie()
+                .value(function(d) {return d.value; })
+    var data_ready = pie(d3.entries(data))
+
+    // shape helper to build arcs:
+    var arcGenerator = d3.arc()
+                            .innerRadius(0)
+                            .outerRadius(radius)
+
+    // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+    d3
+    .select('#pie2')
+    .selectAll('path')
+    .data(data_ready)
+    .enter()
+    .append('path')
+        .attr('d', arcGenerator)
+        .attr('fill', function(d){ return(color(d.data.key)) })
+        .attr("stroke", "black")
+        .style("stroke-width", "2px")
+        .style("opacity", 0.7)
+
+    // // Now add the annotation. Use the centroid method to get the best coordinates
+    d3
+    .select('#pie2')
+    .selectAll('text')
+    .data(data_ready)
+    .enter()
+    .append('text')
+    .text(function(d){ return (d.data.key + ': ' + d.data.value) })
+    .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
+    .style("text-anchor", "middle")
+    .style("font-size", 10)
+})
+
+// Create bar chart 
 var svg = d3.select("#bar"),
             margin = 300,
             width = svg.attr("width") - margin,
