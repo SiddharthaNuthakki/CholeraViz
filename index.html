@@ -46,7 +46,7 @@
 </style>
 <body>
 
-<h1>INFO H517 | Project 1 | Interactive visualizations of London's 1854 cholera epidemic using D3.js</h1>
+<h1 style="background-color: rgb(178, 211, 238);">INFO H517 | Project 1 | Interactive visualizations of London's 1854 cholera epidemic using D3.js</h1>
 
 <div class="leftchart" >
     <div style="position:absolute; top:-05px; left:300px; font-size:20px;"><p>Distribution of deaths vs pumps </p></div>
@@ -71,6 +71,9 @@
     </div>
 </div>
 
+<div style="position:absolute; top:50px; left:1200px; width: 160px; ">
+    <h2 style="background-color: rgb(178, 211, 238);"><a href="https://github.com/SiddharthaNuthakki/CholeraViz/blob/main/README.md" target="_blank">Documentation</a></h2>
+</div>
 <!-- <div class="rightchart"> -->
     <div style="position:absolute; top:110px; left:1060px; width: 250px;"><p>Distribution of deaths over time </p></div>
     <div style="border: 3px outset greenyellow;position:absolute; top:110px; left:910px; width: 490px; height:350px;">
@@ -431,14 +434,14 @@ d3.csv("deathdays1.csv", function(error, data) {
         .on("mouseover", function(d) {
             var selecteddate = d.dateid;
 
-            d3.select(this).attr("fill", "rgb(0, 153, 0)");
+            d3.select(this).attr("fill", "blue");
 
             d3
             .selectAll('circle')
             .filter(function(d) {
               return (d.dateid) == selecteddate
             })
-            .style("fill", "rgb(0, 153, 0)");
+            .style("fill", "blue");
         })
         .on("mouseout", function(d)  {
             var selecteddate = d.dateid;
