@@ -85,7 +85,7 @@
         style="position:absolute; top:0px; left:-20px; "> </svg>
     </div>
 
-    <div style="background-color: rgb(214, 209, 209);position:absolute; top:820px; left:10px; width: 1400px; height:160px;">
+    <div style="background-color: rgb(214, 209, 209);position:absolute; top:840px; left:10px; width: 1400px; height:160px;">
         <h3>References:</h3>
         <div><p>Pie chart: https://www.d3-graph-gallery.com/graph/pie_annotation.html</p></div>
         <div><p>Legend: https://www.d3-graph-gallery.com/graph/custom_legend.html</p></div>
@@ -197,6 +197,10 @@ d3.csv("deaths_age_sex1.csv", function (data) {
         } else {
             d3.selectAll('circle')
                 .style('fill', 'rgb(255, 51, 255)')
+
+            // d3.selectAll('mydots')
+            //     .transition()
+            //     .attr('opacity', 0);
             
             // if (value == false) {
             // ageSvg.selectAll('#agelegend').hide();
